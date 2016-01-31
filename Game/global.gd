@@ -6,6 +6,7 @@ var Actors = {}
 var current_scene = null
 
 var stages = {}
+var boss_final_hit
 
 func _ready():
 	#Initalizer

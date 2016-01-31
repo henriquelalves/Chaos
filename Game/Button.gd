@@ -27,5 +27,5 @@ func on_body_enter(body):
 			add_child(label)
 
 func on_body_exit(body):
-	if(body.get_name() == "Player"):
+	if(body.is_in_group("players")):
 		is_pressed = false
