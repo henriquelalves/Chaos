@@ -5,19 +5,29 @@ var Actors = {}
 
 var current_scene = null
 
+var stages = {}
+
 func _ready():
 	#Initalizer
 	Actors["Enemy1"] = load("res://Game/Enemy1.scn")
 	Actors["Bullet"] = load("res://Game/Bullet.scn")
 	Actors["Wall"] = load("res://Game/Wall.scn")
 	Actors["Player"] = load("res://Game/Player.scn")
+	Actors["Player1"] = load("res://Game/Player1.scn")
+	Actors["Player2"] = load("res://Game/Player2.scn")
+	Actors["Player3"] = load("res://Game/Player3.scn")
 	Actors["Turret"] = load("res://Game/Turret.scn")
 	Actors["Spawner"] = load("res://Game/Spawner.scn")
 	Actors["Hole"] = load("res://Game/Hole.scn")
 	Actors["Door"] = load("res://Game/Door.scn")
+	Actors["Button"] = load("res://Game/Button.scn")
+	Actors["FloatingWarning"] = load("res://Game/FloatingWarning.scn")
 	
 	var root = get_tree().get_root()
 	current_scene = root.get_child(root.get_child_count() - 1)
+	
+	# stages initialization
+	stages["Stage"] = {}
 	
 	pass
 

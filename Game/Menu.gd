@@ -4,9 +4,13 @@ extends Control
 # member variables here, example:
 var used_keys = []
 var size = 26
-# var b="textvar"
+
+var global
 
 func _ready():
+	set_process_input(true)
+	global = get_node("/root/global")
+	
 	var i = 65
 	while i <= 90:
 		used_keys.append(i)
@@ -15,7 +19,12 @@ func _ready():
 	set_keys("Player2")
 	set_keys("Player3")
 	set_labels_inputs()
-	
+
+func _input(event):
+	if(event.type == InputEvent.KEY and event.is_pressed() == true ):
+		if event.scancode == OS.find_scancode_from_string("q"):
+			global.goto_scene("res://Game/Stage.scn")
+
 func set_keys(name):
 	get_node(name).key_movements["up"] = remove_used_key()
 	print(get_node(name).key_movements["up"])

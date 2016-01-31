@@ -2,7 +2,6 @@ extends Area2D
 
 var direction = Vector2()
 var global
-
 func _ready():
 	set_fixed_process(true)
 	

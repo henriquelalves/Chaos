@@ -13,9 +13,9 @@ var knockback_direction = Vector2()
 # Public functions
 
 func set_target(players_pos):
-	target_pos = 0
+	target_pos = Vector2(0,0)
 	for p in players_pos:
-		if target_pos == 0:
+		if target_pos == Vector2(0,0):
 			target_pos = p
 		else:
 			if ((get_global_pos() - target_pos).length() > (get_global_pos() - p).length()):
