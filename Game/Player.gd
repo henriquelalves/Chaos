@@ -96,7 +96,7 @@ func _fixed_process(delta):
 		if(delta.length() < 16.0):
 			fall_vel = 1.0
 		move(Vector2(target_fall - get_global_pos()).normalized()*fall_vel)
-		if(Vector2(target_fall - get_global_pos()).length() < 4.0):
+		if(Vector2(target_fall - get_global_pos()).length() < 6.0):
 			move_to(checkpoint)
 
 func _input(event):

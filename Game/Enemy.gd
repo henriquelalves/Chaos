@@ -10,11 +10,16 @@ var life = 3
 var is_knockback = false
 var knockback_direction = Vector2()
 
-
 # Public functions
 
-func set_target(new_t):
-	target_pos = new_t
+func set_target(players_pos):
+	target_pos = 0
+	for p in players_pos:
+		if target_pos == 0:
+			target_pos = p
+		else:
+			if ((get_global_pos() - target_pos).length() > (get_global_pos() - p).length()):
+				target_pos = p
 
 func knockback(var from_pos, var strength):
 	knockback_direction = Vector2(get_global_pos() - from_pos).normalized()*strength

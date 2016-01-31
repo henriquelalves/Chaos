@@ -12,6 +12,16 @@ func _ready():
 	
 	set_fixed_process(true)
 	
+	# Tilemap set
+	var tileset = get_node("Tilemap").get_tileset()
+	for i in get_node("Tilemap").get_used_cells():
+		var tile_name = tileset.tile_get_name(get_node("Tilemap").get_cell(i.x,i.y))
+		var new_child = global.Actors[tile_name].instance()
+		new_child.set_global_pos(Vector2(i.x*32 + 16,i.y*32 + 16))
+		add_child(new_child)
+	
+	get_node("Tilemap").queue_free()
+	
 	# Spawner timers connect
 	var spawners = get_tree().get_nodes_in_group("spawners")
 	for sp in spawners:
@@ -29,7 +39,11 @@ func _ready():
 	pass
 
 func _fixed_process(delta):
-	get_tree().call_group(0,"enemies","set_target",get_node("Players/Player").get_pos())
+	var players = get_tree().get_nodes_in_group("players")
+	var players_pos = []
+	for p in players:
+		players_pos.push_back(p.get_global_pos())
+	get_tree().call_group(0,"enemies","set_target",players_pos)
 
 func turret_bullet(global_pos, bullet_direction):
 	var newBullet = global.Actors["Bullet"].instance()
