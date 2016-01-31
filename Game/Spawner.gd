@@ -35,6 +35,5 @@ func _fixed_process(delta):
 	
 	timer += delta
 	if(timer >= timer_limit):
-		print("oiasdSDAS")
 		timer -= timer_limit
 		emit_signal("spawn_timer", get_global_pos())

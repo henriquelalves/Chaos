@@ -88,6 +88,9 @@ func can_open_door():
 				global.stages[get_name()][b.get_global_pos()] = b.player_name
 			get_tree().call_group(0,"doors", "queue_free")
 
+func force_open():
+	get_tree().call_group(0,"doors", "queue_free")
+
 func spawn_enemy(pos):
 	var newEnemy = global.Actors["Enemy1"].instance()
 	newEnemy.set_pos(pos)

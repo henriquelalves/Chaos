@@ -4,7 +4,7 @@ var direction = Vector2()
 var global
 func _ready():
 	set_fixed_process(true)
-	
+	add_to_group("enemies")
 	global = get_node("/root/global")
 	
 	connect("body_enter",self,"on_body_enter")
