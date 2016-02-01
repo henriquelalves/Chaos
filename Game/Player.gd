@@ -25,11 +25,19 @@ func knockback(var from_pos, var strength):
 func _ready():
 	global = get_node("/root/global")
 	add_to_group("players")
+	
+	get_node("AnimationPlayer").play("default")
+	get_node("AnimationSword").play("default")
+	
 	# Normal initialization
 	key_movements["up"] = OS.find_scancode_from_string("w") # Returns integer
 	key_movements["down"] = OS.find_scancode_from_string("s")
 	key_movements["right"] = OS.find_scancode_from_string("d")
 	key_movements["left"] = OS.find_scancode_from_string("a")
+	# Override
+	if(global.players_keys.has(get_name())):
+		key_movements = global.players_keys[get_name()]
+	
 	
 	# Set processes
 	set_process_input(true)
@@ -50,7 +58,7 @@ func on_body_enter(body):
 	print(body.get_owner())
 	if(body.is_in_group("enemies")):
 		knockback(body.get_global_pos(), 30)
-		global.players_life -= 1
+		get_parent().stage_timer -= 1
 	elif(body.is_in_group("spawners")):
 		knockback(body.get_global_pos(), 20)
 	elif(body.is_in_group("holes")):
@@ -98,27 +106,32 @@ func _fixed_process(delta):
 		move(Vector2(target_fall - get_global_pos()).normalized()*fall_vel)
 		if(Vector2(target_fall - get_global_pos()).length() < 6.0):
 			move_to(checkpoint)
+			get_parent().stage_timer -= 2
 
 func _input(event):
 	if(event.type == InputEvent.KEY and event.is_pressed() == true ):
 		if(event.scancode == key_movements["up"]):
 			direction = "up"
 			is_moving = true
-			get_node("AnimationPlayer").play("default")
+			get_node("AnimationPlayer").play("move_up")
 			get_node("AnimationSword").play("sword_up")
 		elif(event.scancode == key_movements["down"]):
 			direction = "down"
 			is_moving = true
+			get_node("AnimationPlayer").play("move_down")
 			get_node("AnimationSword").play("sword_down")
 		elif(event.scancode == key_movements["left"]):
 			direction = "left"
 			is_moving = true
-			get_node("AnimationPlayer").play("movement_left")
+			get_node("AnimationPlayer").play("move_left")
 			get_node("AnimationSword").play("sword_left")
 		elif(event.scancode == key_movements["right"]):
 			direction = "right"
 			is_moving = true
+			get_node("AnimationPlayer").play("move_right")
 			get_node("AnimationSword").play("sword_right")
 	elif(event.type == InputEvent.KEY and event.is_pressed() == false):
-		is_moving = false
-		get_node("AnimationPlayer").stop(false)
+		for k in key_movements:
+			if event.scancode == key_movements[k]:
+				is_moving = false
+				get_node("AnimationPlayer").stop(false)

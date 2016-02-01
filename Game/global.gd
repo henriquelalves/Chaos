@@ -5,8 +5,13 @@ var Actors = {}
 
 var current_scene = null
 
+var number_boss_defeated = 0
+var global_timer = 1000.0
+
 var stages = {}
 var boss_final_hit
+
+var players_keys = {}
 
 func _ready():
 	#Initalizer
@@ -22,6 +27,7 @@ func _ready():
 	Actors["Hole"] = load("res://Game/Hole.scn")
 	Actors["Door"] = load("res://Game/Door.scn")
 	Actors["Button"] = load("res://Game/Button.scn")
+	Actors["Floor"] = load("res://Game/Floor.scn")
 	Actors["FloatingWarning"] = load("res://Game/FloatingWarning.scn")
 	
 	var root = get_tree().get_root()
@@ -29,7 +35,13 @@ func _ready():
 	
 	# stages initialization
 	stages["Stage"] = {}
-	
+	stages["Stage 1"] = {}
+	stages["Stage 2"] = {}
+	stages["Stage 3"] = {}
+	stages["Stage 4"] = {}
+	stages["Stage 5"] = {}
+	stages["Stage 6"] = {}
+	stages["Stage 7"] = {}
 	pass
 
 func initalize_stage():
