@@ -13,7 +13,6 @@ var is_knockback = false
 var knockback_direction = Vector2()
 # Falling
 var is_falling = false
-var target_fall = 0
 var checkpoint = Vector2()
 
 # Public functions
@@ -55,23 +54,21 @@ func _ready():
 	pass
 
 func on_body_enter(body):
-	print(body.get_owner())
+	
 	if(body.is_in_group("enemies")):
 		knockback(body.get_global_pos(), 30)
 		get_parent().stage_timer -= 1
 	elif(body.is_in_group("spawners")):
 		knockback(body.get_global_pos(), 20)
 	elif(body.is_in_group("holes")):
-		if(is_falling == false):
-			target_fall = body.get_global_pos()
-		else:
-			if(get_global_pos().distance_to(target_fall) > get_global_pos().distance_to(body.get_global_pos())):
-				target_fall = body.get_global_pos()
 		is_falling = true
 
 func on_body_exit(body):
 	if(body.is_in_group("holes")):
-		if(body.get_global_pos() == target_fall):
+		var bodies = get_node("PlayerEnemyCollision").get_overlapping_bodies()
+		for b in bodies:
+			if b.is_in_group("holes"):
+				return
 			is_falling = false
 
 func on_body_enter_sword(body):
@@ -93,18 +90,31 @@ func _fixed_process(delta):
 			elif(direction == "left"):
 				move(Vector2(-speed,0))
 	else:
+		# Neat particle effect for playerfeedback
+		var particleEffect = global.Actors["ParticleHit"].instance()
+		get_parent().add_child(particleEffect)
+		particleEffect.set_color(Color(255,0,0))
+		particleEffect.set_global_pos(get_global_pos())
+		print(particleEffect.is_emitting())
+		# Knockback Movement
 		move(knockback_direction)
 		is_knockback = false
 	if(is_falling):
-		print(target_fall)
-		var delta = Vector2(target_fall - get_global_pos())
-		var fall_vel = 0.2
-		if(delta.length() < 32.0):
+		var bodies = get_node("PlayerEnemyCollision").get_overlapping_areas()
+		var nearest_distance = Vector2(0,0)
+		for b in bodies:
+			if b.is_in_group("holes"):
+				if(nearest_distance == Vector2(0,0) or (get_global_pos() - b.get_global_pos()).length() < (get_global_pos() - nearest_distance).length()):
+					nearest_distance = b.get_global_pos()
+		
+		var delta = Vector2(nearest_distance - get_global_pos())
+		var fall_vel = 0.0
+		if(delta.length() < 23.0):
 			fall_vel = 0.5
 		if(delta.length() < 16.0):
-			fall_vel = 1.0
-		move(Vector2(target_fall - get_global_pos()).normalized()*fall_vel)
-		if(Vector2(target_fall - get_global_pos()).length() < 6.0):
+			fall_vel = 3.0
+		move(Vector2(nearest_distance - get_global_pos()).normalized()*fall_vel)
+		if(Vector2(nearest_distance - get_global_pos()).length() < 4.0):
 			move_to(checkpoint)
 			get_parent().stage_timer -= 2
 

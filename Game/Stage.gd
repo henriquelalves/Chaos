@@ -89,7 +89,6 @@ func _fixed_process(delta):
 	# Check if this stage is finished
 	for p in players:
 		if p.get_global_pos().y < 16:
-			print(global.stages[get_name()])
 			if(next_stage != ""):
 				# Save state of this stage and go to next one
 				var spawners = get_tree().get_nodes_in_group("spawners")
@@ -116,6 +115,10 @@ func can_open_door():
 	for b in buttons:
 		if b.is_pressed == false:
 			button_able = false
+	
+	if(button_able == false):
+		for b in buttons:
+			b.player_name = null
 	
 	if(number_spawners == 0 and button_able == true):
 		var doors = get_tree().get_nodes_in_group("doors")

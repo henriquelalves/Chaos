@@ -6,6 +6,8 @@ var target_pos = Vector2()
 var speed = 1
 var life = 3
 
+var global
+
 # Knockback
 var is_knockback = false
 var knockback_direction = Vector2()
@@ -27,6 +29,8 @@ func knockback(var from_pos, var strength):
 
 # Private functions
 func _ready():
+	global = get_node("/root/global")
+	
 	set_fixed_process(true)
 	get_node("EnemyArea").connect("area_enter", self, "on_area_enter")
 	
@@ -50,6 +54,13 @@ func _fixed_process(delta):
 		direction = Vector2(target_pos - current_pos)
 		direction = direction.normalized()*speed
 	else:
+		# Neat particle effect for playerfeedback
+		var particleEffect = global.Actors["ParticleHit"].instance()
+		get_parent().add_child(particleEffect)
+		particleEffect.set_color(Color(0,255,0))
+		particleEffect.set_global_pos(get_global_pos())
+		print(particleEffect.is_emitting())
+		# Knockback movement
 		direction = knockback_direction
 		is_knockback = false
 	
